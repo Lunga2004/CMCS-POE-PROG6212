@@ -1,0 +1,227 @@
+﻿@model CMCS.Models.Claim
+@{
+    ViewData["Title"] = "Claim Details - #" + Model.Id;
+}
+
+<div class="container main-content">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <h1><i class="fas fa-file-invoice me-2"></i>Claim Details - #@Model.Id</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Claim Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Lecturer Name:</strong> @Model.LecturerName<br>
+                            <strong>Month:</strong> @Model.Month<br>
+                            <strong>Hours Worked:</strong> @Model.HoursWorked<br>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Hourly Rate:</strong> $@Model.HourlyRate<br>
+                            <strong>Total Amount:</strong> <span class="text-success"><strong>$@Model.TotalAmount</strong></span><br>
+                            <strong>Submitted Date:</strong> @Model.SubmittedDate.ToString("MMM dd, yyyy HH:mm")<br>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <div class="mt-3">
+                            <strong>Notes:</strong>
+                            <p class="border p-2 bg-light rounded">@Model.Notes</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h4 class="mb-0">Status Tracking</h4>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item @(Model.Status != "Pending" ? "completed" : "active")">
+                            <div class="timeline-point"></div>
+                            <div class="timeline-content">
+                                <h5>Claim Submitted</h5>
+                                <p>@Model.SubmittedDate.ToString("MMM dd, yyyy HH:mm")</p>
+                                <span class="badge badge-success">Completed</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item @(Model.Status == "Pending" ? "active" : Model.Status != "Pending" ? "completed" : "")">
+                            <div class="timeline-point"></div>
+                            <div class="timeline-content">
+                                <h5>Under Review</h5>
+                                <p>Being reviewed by coordinator</p>
+                                @if (Model.Status == "Pending")
+                                {
+                                    <span class="badge badge-warning">In Progress</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success">Completed</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="timeline-item @(Model.Status != "Pending" ? "completed" : "")">
+                            <div class="timeline-point"></div>
+                            <div class="timeline-content">
+                                <h5>@(Model.Status == "Approved" ? "Approved" : Model.Status == "Rejected" ? "Rejected" : "Processing")</h5>
+                                @if (Model.ProcessedDate.HasValue)
+                                {
+                                    <p>@Model.ProcessedDate.Value.ToString("MMM dd, yyyy HH:mm") by @Model.ProcessedBy</p>
+                                }
+                                else
+                                {
+                                    <p>Awaiting decision</p>
+                                }
+                                <span class="badge badge-@(Model.Status == "Approved" ? "success" : Model.Status == "Rejected" ? "danger" : "warning")">@Model.Status</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Quick Status</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="status-indicator status-@Model.Status.ToLower() mb-3">
+                        <i class="fas fa-@(Model.Status == "Approved" ? "check-circle" : Model.Status == "Rejected" ? "times-circle" : "clock") fa-3x"></i>
+                    </div>
+                    <h3 class="text-@(Model.Status == "Approved" ? "success" : Model.Status == "Rejected" ? "danger" : "warning")">@Model.Status</h3>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h4 class="mb-0">Actions</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.Status == "Pending")
+                    {
+                        <a href="/Claim/Approve/@Model.Id" class="btn btn-success btn-block mb-2" onclick="return confirm('Approve this claim?')">
+                            <i class="fas fa-check me-2"></i>Approve Claim
+                        </a>
+                        <a href="/Claim/Reject/@Model.Id" class="btn btn-danger btn-block" onclick="return confirm('Reject this claim?')">
+                            <i class="fas fa-times me-2"></i>Reject Claim
+                        </a>
+                    }
+                    <a href="/Claim" class="btn btn-secondary btn-block mt-2">
+                        <i class="fas fa-arrow-left me-2"></i>Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding-left: 2rem;
+    }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary-purple), var(--primary-purple-light));
+        }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: var(--bg-white);
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(139, 92, 246, 0.08);
+        border-left: 4px solid var(--primary-purple);
+    }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.3rem;
+            top: 2rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-purple);
+            border: 3px solid var(--bg-white);
+            box-shadow: 0 0 0 3px var(--primary-purple);
+        }
+
+        .timeline-item.completed {
+            border-left-color: var(--secondary-teal);
+        }
+
+            .timeline-item.completed::before {
+                background: var(--secondary-teal);
+                box-shadow: 0 0 0 3px var(--secondary-teal);
+            }
+
+        .timeline-item.active {
+            border-left-color: var(--primary-purple);
+            background: var(--primary-purple-bg);
+        }
+
+            .timeline-item.active::before {
+                background: var(--primary-purple);
+                box-shadow: 0 0 0 3px var(--primary-purple);
+                animation: pulse 2s infinite;
+            }
+
+    .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+    }
+
+    .status-pending {
+        background: linear-gradient(135deg, #FEF3C7, #F59E0B);
+        color: #92400E;
+    }
+
+    .status-approved {
+        background: linear-gradient(135deg, #D1FAE5, var(--secondary-teal));
+        color: #065F46;
+    }
+
+    .status-rejected {
+        background: linear-gradient(135deg, #FEE2E2, var(--accent-pink));
+        color: #991B1B;
+    }
+
+    @@keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+        }
+    }
+</style>

@@ -1,10 +1,11 @@
-﻿@{
+﻿@model CMCS.Models.Claim
+@{
     ViewData["Title"] = "Submit Claim";
 }
 
 <h2>Submit Monthly Claim</h2>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label>Lecturer Name</label>
         <input type="text" class="form-control" name="LecturerName" required>
@@ -30,6 +31,30 @@
         <textarea class="form-control" name="Notes"></textarea>
     </div>
 
+    <div class="form-group">
+        <label>Supporting Documents (PDF, DOCX, XLSX - Max 5MB each)</label>
+        <input type="file" class="form-control" name="files" multiple accept=".pdf,.docx,.xlsx">
+        <small class="form-text text-muted">You can select multiple files. Only PDF, Word, and Excel files are allowed.</small>
+    </div>
+
+    <div id="fileList" class="mb-3">
+        <!-- Uploaded files will be listed here -->
+    </div>
+
     <button type="submit" class="btn btn-primary">Submit Claim</button>
     <a href="/Claim" class="btn btn-secondary">View All Claims</a>
 </form>
+
+@section Scripts {
+    <script>
+        // Display selected file names
+        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '<strong>Selected Files:</strong><br>';
+
+            for (let i = 0; i < this.files.length; i++) {
+                fileList.innerHTML += '<span class="badge badge-info mr-2">' + this.files[i].name + '</span>';
+            }
+        });
+    </script>
+}

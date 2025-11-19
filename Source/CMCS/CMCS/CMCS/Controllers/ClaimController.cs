@@ -8,6 +8,12 @@ namespace CMCS.Controllers
     {
         private static List<Claim> _claims = new List<Claim>();
         private static int _nextId = 1;
+        private readonly IWebHostEnvironment _environment;
+
+        public ClaimController(IWebHostEnvironment environment)
+        {
+            _environment = environment;
+        }
 
         public IActionResult Index()
         {
@@ -20,11 +26,58 @@ namespace CMCS.Controllers
         }
 
         [HttpPost]
-        public IActionResult Submit(Claim claim)
+        public IActionResult Submit(Claim claim, List<IFormFile> files)
         {
             claim.Id = _nextId++;
             claim.TotalAmount = claim.HoursWorked * claim.HourlyRate;
             claim.Status = "Pending";
+
+            // Handle file uploads
+            if (files != null && files.Count > 0)
+            {
+                foreach (var file in files)
+                {
+                    if (file.Length > 0)
+                    {
+                        // Validate file type
+                        var allowedExtensions = new[] { ".pdf", ".docx", ".xlsx" };
+                        var fileExtension = Path.GetExtension(file.FileName).ToLower();
+
+                        if (!allowedExtensions.Contains(fileExtension))
+                        {
+                            ModelState.AddModelError("", "Only PDF, DOCX, and XLSX files are allowed.");
+                            return View(claim);
+                        }
+
+                        // Validate file size (5MB limit)
+                        if (file.Length > 5 * 1024 * 1024)
+                        {
+                            ModelState.AddModelError("", "File size cannot exceed 5MB.");
+                            return View(claim);
+                        }
+
+                        // Create uploads directory if it doesn't exist
+                        var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        // Generate unique filename
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // Save file
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+                        // Store document name
+                        claim.DocumentNames.Add(file.FileName);
+                    }
+                }
+            }
 
             _claims.Add(claim);
             return RedirectToAction("Index");
@@ -48,6 +101,17 @@ namespace CMCS.Controllers
                 claim.Status = "Rejected";
             }
             return RedirectToAction("Index");
+        }
+
+        public IActionResult DownloadFile(int claimId, string fileName)
+        {
+            var filePath = Path.Combine(_environment.WebRootPath, "uploads", fileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                return File(fileBytes, "application/octet-stream", fileName);
+            }
+            return NotFound();
         }
     }
 }

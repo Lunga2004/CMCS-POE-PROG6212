@@ -11,5 +11,8 @@
         public string Status { get; set; } = "Pending";
         public string Notes { get; set; } = "";
         public List<string> DocumentNames { get; set; } = new List<string>();
+        public DateTime SubmittedDate { get; set; } = DateTime.Now;
+        public DateTime? ProcessedDate { get; set; }
+        public string ProcessedBy { get; set; } = "";
     }
 }

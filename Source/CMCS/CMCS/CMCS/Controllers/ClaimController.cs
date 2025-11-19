@@ -31,6 +31,7 @@ namespace CMCS.Controllers
             claim.Id = _nextId++;
             claim.TotalAmount = claim.HoursWorked * claim.HourlyRate;
             claim.Status = "Pending";
+            claim.SubmittedDate = DateTime.Now;
 
             // Handle file uploads
             if (files != null && files.Count > 0)
@@ -89,6 +90,8 @@ namespace CMCS.Controllers
             if (claim != null)
             {
                 claim.Status = "Approved";
+                claim.ProcessedDate = DateTime.Now;
+                claim.ProcessedBy = "Coordinator";
             }
             return RedirectToAction("Index");
         }
@@ -99,19 +102,37 @@ namespace CMCS.Controllers
             if (claim != null)
             {
                 claim.Status = "Rejected";
+                claim.ProcessedDate = DateTime.Now;
+                claim.ProcessedBy = "Coordinator";
             }
             return RedirectToAction("Index");
         }
 
-        public IActionResult DownloadFile(int claimId, string fileName)
+        public IActionResult Details(int id)
         {
-            var filePath = Path.Combine(_environment.WebRootPath, "uploads", fileName);
-            if (System.IO.File.Exists(filePath))
+            var claim = _claims.Find(c => c.Id == id);
+            if (claim == null)
             {
-                var fileBytes = System.IO.File.ReadAllBytes(filePath);
-                return File(fileBytes, "application/octet-stream", fileName);
+                return NotFound();
             }
-            return NotFound();
+            return View(claim);
+        }
+
+        public IActionResult GetClaimStatus(int id)
+        {
+            var claim = _claims.Find(c => c.Id == id);
+            if (claim == null)
+            {
+                return Json(new { status = "Not Found" });
+            }
+
+            return Json(new
+            {
+                status = claim.Status,
+                submittedDate = claim.SubmittedDate.ToString("MMM dd, yyyy HH:mm"),
+                processedDate = claim.ProcessedDate?.ToString("MMM dd, yyyy HH:mm") ?? "Not processed",
+                processedBy = claim.ProcessedBy ?? "Not processed"
+            });
         }
     }
 }

@@ -1,22 +1,76 @@
-html {
-  font-size: 14px;
+/* Status Tracking Styles */
+.progress {
+    border-radius: 10px;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.progress-bar {
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 12px;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.badge-pill {
+    border-radius: 10px;
+    padding: 6px 12px;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #e3e3e3;
 }
 
-body {
-  margin-bottom: 60px;
+.table th {
+    border-top: none;
+    font-weight: 600;
+}
+
+/* Timeline Styles */
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+}
+
+.timeline-point {
+    position: absolute;
+    left: -30px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #dee2e6;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px #dee2e6;
+}
+
+.timeline-item.active .timeline-point {
+    background: #007bff;
+    box-shadow: 0 0 0 2px #007bff;
+}
+
+.timeline-item.completed .timeline-point {
+    background: #28a745;
+    box-shadow: 0 0 0 2px #28a745;
+}
+
+.timeline-content {
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    border-left: 3px solid #dee2e6;
+}
+
+.timeline-item.active .timeline-content {
+    border-left-color: #007bff;
+    background: #e3f2fd;
+}
+
+.timeline-item.completed .timeline-content {
+    border-left-color: #28a745;
+    background: #e8f5e8;
 }

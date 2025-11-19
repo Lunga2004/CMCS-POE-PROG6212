@@ -1,0 +1,197 @@
+﻿@model CMCS.Models.Claim
+@{
+    ViewData["Title"] = "Claim Details - #" + Model.Id;
+}
+
+<h2>Claim Details - #@Model.Id</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Claim Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Lecturer Name:</strong> @Model.LecturerName<br>
+                        <strong>Month:</strong> @Model.Month<br>
+                        <strong>Hours Worked:</strong> @Model.HoursWorked<br>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Hourly Rate:</strong> $@Model.HourlyRate<br>
+                        <strong>Total Amount:</strong> <span class="text-success"><strong>$@Model.TotalAmount</strong></span><br>
+                        <strong>Submitted Date:</strong> @Model.SubmittedDate.ToString("MMM dd, yyyy HH:mm")<br>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Notes))
+                {
+                    <div class="mt-3">
+                        <strong>Notes:</strong>
+                        <p class="border p-2 bg-light">@Model.Notes</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h4>Status Tracking</h4>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="timeline-item @(Model.Status != "Pending" ? "completed" : "active")">
+                        <div class="timeline-point"></div>
+                        <div class="timeline-content">
+                            <h5>Claim Submitted</h5>
+                            <p>@Model.SubmittedDate.ToString("MMM dd, yyyy HH:mm")</p>
+                            <span class="badge badge-success">Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item @(Model.Status == "Pending" ? "active" : Model.Status != "Pending" ? "completed" : "")">
+                        <div class="timeline-point"></div>
+                        <div class="timeline-content">
+                            <h5>Under Review</h5>
+                            <p>Being reviewed by coordinator</p>
+                            @if (Model.Status == "Pending")
+                            {
+                                <span class="badge badge-warning">In Progress</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success">Completed</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="timeline-item @(Model.Status != "Pending" ? "completed" : "")">
+                        <div class="timeline-point"></div>
+                        <div class="timeline-content">
+                            <h5>@(Model.Status == "Approved" ? "Approved" : Model.Status == "Rejected" ? "Rejected" : "Processing")</h5>
+                            @if (Model.ProcessedDate.HasValue)
+                            {
+                                <p>@Model.ProcessedDate.Value.ToString("MMM dd, yyyy HH:mm") by @Model.ProcessedBy</p>
+                            }
+                            else
+                            {
+                                <p>Awaiting decision</p>
+                            }
+                            <span class="badge badge-@(Model.Status == "Approved" ? "success" : Model.Status == "Rejected" ? "danger" : "warning")">@Model.Status</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Quick Status</h4>
+            </div>
+            <div class="card-body text-center">
+                <div class="status-indicator status-@Model.Status.ToLower() mb-3">
+                    <i class="fas fa-@(Model.Status == "Approved" ? "check-circle" : Model.Status == "Rejected" ? "times-circle" : "clock") fa-3x"></i>
+                </div>
+                <h3 class="text-@(Model.Status == "Approved" ? "success" : Model.Status == "Rejected" ? "danger" : "warning")">@Model.Status</h3>
+
+                @if (Model.DocumentNames != null && Model.DocumentNames.Any())
+                {
+                    <div class="mt-3">
+                        <h5>Documents</h5>
+                        @foreach (var doc in Model.DocumentNames)
+                        {
+                            <span class="badge badge-info">@doc</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h4>Actions</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.Status == "Pending")
+                {
+                    <a href="/Claim/Approve/@Model.Id" class="btn btn-success btn-block mb-2" onclick="return confirm('Approve this claim?')">Approve Claim</a>
+                    <a href="/Claim/Reject/@Model.Id" class="btn btn-danger btn-block" onclick="return confirm('Reject this claim?')">Reject Claim</a>
+                }
+                <a href="/Claim" class="btn btn-secondary btn-block mt-2">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .timeline-point {
+        position: absolute;
+        left: -30px;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #ddd;
+    }
+
+    .timeline-item.active .timeline-point {
+        background: #007bff;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+    }
+
+    .timeline-item.completed .timeline-point {
+        background: #28a745;
+    }
+
+    .status-indicator {
+        padding: 20px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .status-pending {
+        color: #ffc107;
+    }
+
+    .status-approved {
+        color: #28a745;
+    }
+
+    .status-rejected {
+        color: #dc3545;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Auto-refresh status every 5 seconds
+        setInterval(function() {
+            fetch('/Claim/GetClaimStatus?id=@Model.Id')
+                .then(response => response.json())
+                .then(data => {
+                    // Update status display
+                    document.querySelector('.status-indicator').className = `status-indicator status-${data.status.toLowerCase()}`;
+                    document.querySelector('h3').textContent = data.status;
+                    document.querySelector('h3').className = `text-${data.status === 'Approved' ? 'success' : data.status === 'Rejected' ? 'danger' : 'warning'}`;
+
+                    // Update timeline if status changed
+                    if (data.status !== '@Model.Status') {
+                        location.reload(); // Reload to show updated timeline
+                    }
+                });
+        }, 5000);
+    </script>
+}

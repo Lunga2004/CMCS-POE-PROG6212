@@ -1,6 +1,6 @@
 ﻿@model List<CMCS.Models.Claim>
 @{
-    ViewData["Title"] = "All Claims - Status Tracking";
+    ViewData["Title"] = "View Claims - Status Tracking";
 }
 
 <div class="container main-content">
@@ -204,48 +204,5 @@
         }
 
         setInterval(updateTimer, 1000);
-
-        // Real-time status updates for individual claims
-        function updateClaimStatus(claimId) {
-            fetch('/Claim/GetClaimStatus?id=' + claimId)
-                .then(response => response.json())
-                .then(data => {
-                    // Find the row for this claim
-                    const rows = document.querySelectorAll('tbody tr');
-                    rows.forEach(row => {
-                        if (row.querySelector('td:first-child strong').textContent === '#' + claimId) {
-                            // Update status badge
-                            const statusBadge = row.querySelector('.badge');
-                            statusBadge.textContent = data.status;
-                            statusBadge.className = `badge badge-${data.status === 'Approved' ? 'success' : data.status === 'Rejected' ? 'danger' : 'warning'}`;
-
-                            // Update progress bar
-                            const progressBar = row.querySelector('.progress-bar');
-                            if (data.status === 'Pending') {
-                                progressBar.style.width = '33%';
-                                progressBar.className = 'progress-bar bg-warning';
-                                progressBar.title = 'Submitted - Under Review';
-                                row.querySelector('.text-muted').textContent = 'Under Review';
-                            } else if (data.status === 'Approved') {
-                                progressBar.style.width = '100%';
-                                progressBar.className = 'progress-bar bg-success';
-                                progressBar.title = 'Approved - Completed';
-                                row.querySelector('.text-muted').textContent = 'Completed';
-                            } else if (data.status === 'Rejected') {
-                                progressBar.style.width = '100%';
-                                progressBar.className = 'progress-bar bg-danger';
-                                progressBar.title = 'Rejected - Completed';
-                                row.querySelector('.text-muted').textContent = 'Completed';
-                            }
-                        }
-                    });
-                });
-        }
-
-        // Initial call to set up real-time updates
-        @foreach (var claim in Model)
-        {
-            <text>updateClaimStatus(@claim.Id);</text>
-        }
     </script>
 }

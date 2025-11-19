@@ -15,76 +15,67 @@ namespace CMCS.Controllers
             _environment = environment;
         }
 
-        // FIXED: This is the main View Claims page
+        // GET: /Claim - View all claims
         public IActionResult Index()
         {
             return View(_claims);
         }
 
+        // GET: /Claim/Submit - Show claim submission form
         public IActionResult Submit()
         {
             return View();
         }
 
+        // POST: /Claim/Submit - Process claim submission
         [HttpPost]
         public IActionResult Submit(Claim claim, List<IFormFile> files)
         {
-            claim.Id = _nextId++;
-            claim.TotalAmount = claim.HoursWorked * claim.HourlyRate;
-            claim.Status = "Pending";
-            claim.SubmittedDate = DateTime.Now;
-
-            // Handle file uploads
-            if (files != null && files.Count > 0)
+            if (ModelState.IsValid)
             {
-                foreach (var file in files)
+                claim.Id = _nextId++;
+                claim.TotalAmount = claim.HoursWorked * claim.HourlyRate;
+                claim.Status = "Pending";
+                claim.SubmittedDate = DateTime.Now;
+
+                // Handle file uploads
+                if (files != null && files.Count > 0)
                 {
-                    if (file.Length > 0)
+                    claim.DocumentNames = new List<string>();
+                    foreach (var file in files)
                     {
-                        // Validate file type
-                        var allowedExtensions = new[] { ".pdf", ".docx", ".xlsx" };
-                        var fileExtension = Path.GetExtension(file.FileName).ToLower();
-
-                        if (!allowedExtensions.Contains(fileExtension))
+                        if (file.Length > 0)
                         {
-                            ModelState.AddModelError("", "Only PDF, DOCX, and XLSX files are allowed.");
-                            return View(claim);
+                            // Validate file type
+                            var allowedExtensions = new[] { ".pdf", ".docx", ".xlsx" };
+                            var fileExtension = Path.GetExtension(file.FileName).ToLower();
+
+                            if (!allowedExtensions.Contains(fileExtension))
+                            {
+                                ModelState.AddModelError("", "Only PDF, DOCX, and XLSX files are allowed.");
+                                return View(claim);
+                            }
+
+                            // Validate file size (5MB limit)
+                            if (file.Length > 5 * 1024 * 1024)
+                            {
+                                ModelState.AddModelError("", "File size cannot exceed 5MB.");
+                                return View(claim);
+                            }
+
+                            // Store document name
+                            claim.DocumentNames.Add(file.FileName);
                         }
-
-                        // Validate file size (5MB limit)
-                        if (file.Length > 5 * 1024 * 1024)
-                        {
-                            ModelState.AddModelError("", "File size cannot exceed 5MB.");
-                            return View(claim);
-                        }
-
-                        // Create uploads directory if it doesn't exist
-                        var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-                        if (!Directory.Exists(uploadsFolder))
-                        {
-                            Directory.CreateDirectory(uploadsFolder);
-                        }
-
-                        // Generate unique filename
-                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                        // Save file
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            file.CopyTo(fileStream);
-                        }
-
-                        // Store document name
-                        claim.DocumentNames.Add(file.FileName);
                     }
                 }
-            }
 
-            _claims.Add(claim);
-            return RedirectToAction("Index");
+                _claims.Add(claim);
+                return RedirectToAction("Index");
+            }
+            return View(claim);
         }
 
+        // GET: /Claim/Approve/{id} - Approve a claim
         public IActionResult Approve(int id)
         {
             var claim = _claims.Find(c => c.Id == id);
@@ -97,6 +88,7 @@ namespace CMCS.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: /Claim/Reject/{id} - Reject a claim
         public IActionResult Reject(int id)
         {
             var claim = _claims.Find(c => c.Id == id);
@@ -109,6 +101,7 @@ namespace CMCS.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: /Claim/Details/{id} - Show claim details
         public IActionResult Details(int id)
         {
             var claim = _claims.Find(c => c.Id == id);
@@ -119,6 +112,7 @@ namespace CMCS.Controllers
             return View(claim);
         }
 
+        // GET: /Claim/GetClaimStatus/{id} - API endpoint for status
         public IActionResult GetClaimStatus(int id)
         {
             var claim = _claims.Find(c => c.Id == id);

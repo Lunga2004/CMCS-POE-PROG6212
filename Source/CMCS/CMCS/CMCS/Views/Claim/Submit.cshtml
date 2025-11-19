@@ -56,8 +56,8 @@
                             </small>
                         </div>
 
-                        <div id="fileList" class="mb-4 p-3 rounded" style="background: var(--primary-purple-bg); display: none;">
-                            <strong class="text-purple"><i class="fas fa-paperclip me-2"></i>Selected Files:</strong>
+                        <div id="fileList" class="mb-4 p-3 rounded" style="background: rgba(205, 169, 236, 0.1); display: none;">
+                            <strong class="text-wisteria-light"><i class="fas fa-paperclip me-2"></i>Selected Files:</strong>
                             <div id="fileNames" class="mt-2"></div>
                         </div>
 
@@ -97,15 +97,5 @@
                 fileList.style.display = 'none';
             }
         });
-
-        // Auto-calculate total
-        function calculateTotal() {
-            const hours = parseFloat(document.querySelector('[name="HoursWorked"]').value) || 0;
-            const rate = parseFloat(document.querySelector('[name="HourlyRate"]').value) || 0;
-            document.querySelector('[name="TotalAmount"]').value = (hours * rate).toFixed(2);
-        }
-
-        document.querySelector('[name="HoursWorked"]').addEventListener('input', calculateTotal);
-        document.querySelector('[name="HourlyRate"]').addEventListener('input', calculateTotal);
     </script>
 }

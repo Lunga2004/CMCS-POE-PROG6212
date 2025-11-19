@@ -15,6 +15,7 @@ namespace CMCS.Controllers
             _environment = environment;
         }
 
+        // FIXED: This is the main View Claims page
         public IActionResult Index()
         {
             return View(_claims);

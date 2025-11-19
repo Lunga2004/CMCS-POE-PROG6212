@@ -1,89 +1,251 @@
-﻿@{
-    ViewData["Title"] = "Contract Monthly Claim System";
+﻿@model List<CMCS.Models.Claim>
+@{
+    ViewData["Title"] = "All Claims - Status Tracking";
 }
 
-<div class="hero-section">
-    <div class="container">
-        <h1>Contract Monthly Claim System</h1>
-        <p class="lead">Streamline monthly claims for independent contractor lecturers with our modern, efficient platform</p>
-        <div class="mt-4">
-            <a href="/Claim/Submit" class="btn btn-light btn-lg me-3">
-                <i class="fas fa-plus-circle me-2"></i>Submit New Claim
-            </a>
-            <a href="/Claim/Index" class="btn btn-outline-light btn-lg">
-                <i class="fas fa-list me-2"></i>View All Claims
-            </a>
-        </div>
-    </div>
-</div>
-
 <div class="container main-content">
-    <div class="feature-grid">
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fas fa-paper-plane"></i>
-            </div>
-            <h4>Quick Submission</h4>
-            <p>Submit monthly claims with just a few clicks. Easy form with automatic calculations.</p>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-list-check me-2"></i>Claim Status Tracking</h2>
+        <a href="/Claim/Submit" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Submit New Claim
+        </a>
+    </div>
 
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fas fa-check-circle"></i>
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card">
+                <h4>@Model.Count</h4>
+                <p>Total Claims</p>
             </div>
-            <h4>Real-time Tracking</h4>
-            <p>Track your claim status in real-time with beautiful progress indicators and timelines.</p>
         </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fas fa-file-upload"></i>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <h4>@Model.Count(c => c.Status == "Pending")</h4>
+                <p>Pending</p>
             </div>
-            <h4>Document Upload</h4>
-            <p>Upload supporting documents securely. Multiple file types supported with size limits.</p>
         </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fas fa-bolt"></i>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <h4>@Model.Count(c => c.Status == "Approved")</h4>
+                <p>Approved</p>
             </div>
-            <h4>Fast Approval</h4>
-            <p>Streamlined approval process for coordinators and managers with instant updates.</p>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <h4>@Model.Count(c => c.Status == "Rejected")</h4>
+                <p>Rejected</p>
+            </div>
         </div>
     </div>
 
-    <div class="row mt-5">
-        <div class="col-md-8 mx-auto text-center">
-            <h2 class="mb-4">How It Works</h2>
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="stats-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-1"></i>
-                        </div>
-                        <h5>Submit Claim</h5>
-                        <p class="text-muted">Fill out the simple form with hours and rates</p>
-                    </div>
+    <!-- Claims Table -->
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0"><i class="fas fa-table me-2"></i>All Claims</h4>
+        </div>
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Lecturer</th>
+                                <th>Month</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Submitted</th>
+                                <th>Processed</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var claim in Model)
+                            {
+                                <tr>
+                                    <td><strong>#@claim.Id</strong></td>
+                                    <td>@claim.LecturerName</td>
+                                    <td>@claim.Month</td>
+                                    <td><strong class="text-success">$@claim.TotalAmount</strong></td>
+                                    <td>
+                                        <span class="badge badge-@(claim.Status == "Approved" ? "success" : claim.Status == "Rejected" ? "danger" : "warning")">
+                                            @claim.Status
+                                        </span>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <div class="progress" style="height: 8px;">
+                                            @if (claim.Status == "Pending")
+                                            {
+                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 33%"
+                                                     title="Submitted - Under Review"></div>
+                                            }
+                                            else if (claim.Status == "Approved")
+                                            {
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+                                                     title="Approved - Completed"></div>
+                                            }
+                                            else if (claim.Status == "Rejected")
+                                            {
+                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+                                                     title="Rejected - Completed"></div>
+                                            }
+                                        </div>
+                                        <small class="text-muted">
+                                            @if (claim.Status == "Pending")
+                                            {
+                                                <text>Under Review</text>
+                                            }
+                                            else if (claim.Status == "Approved")
+                                            {
+                                                <text>Completed</text>
+                                            }
+                                            else if (claim.Status == "Rejected")
+                                            {
+                                                <text>Completed</text>
+                                            }
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <small>@claim.SubmittedDate.ToString("MMM dd, yyyy")</small><br>
+                                        <small class="text-muted">@claim.SubmittedDate.ToString("HH:mm")</small>
+                                    </td>
+                                    <td>
+                                        @if (claim.ProcessedDate.HasValue)
+                                        {
+                                            <small>@claim.ProcessedDate.Value.ToString("MMM dd, yyyy")</small>
+
+                                            <br>
+                                            <small class="text-muted">@claim.ProcessedDate.Value.ToString("HH:mm")</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="/Claim/Details/@claim.Id" class="btn btn-info" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            @if (claim.Status == "Pending")
+                                            {
+                                                <a href="/Claim/Approve/@claim.Id" class="btn btn-success" title="Approve Claim"
+                                                   onclick="return confirm('Are you sure you want to approve claim #@claim.Id?')">
+                                                    <i class="fas fa-check"></i>
+                                                </a>
+                                                <a href="/Claim/Reject/@claim.Id" class="btn btn-danger" title="Reject Claim"
+                                                   onclick="return confirm('Are you sure you want to reject claim #@claim.Id?')">
+                                                    <i class="fas fa-times"></i>
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="stats-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-2"></i>
-                        </div>
-                        <h5>Review Process</h5>
-                        <p class="text-muted">Coordinator reviews and approves the claim</p>
-                    </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No Claims Found</h4>
+                    <p class="text-muted">There are no claims submitted yet.</p>
+                    <a href="/Claim/Submit" class="btn btn-primary mt-3">
+                        <i class="fas fa-plus-circle me-2"></i>Submit Your First Claim
+                    </a>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="stats-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-3"></i>
-                        </div>
-                        <h5>Get Paid</h5>
-                        <p class="text-muted">Approved claims are processed for payment</p>
-                    </div>
+            }
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-paper-plane fa-2x text-primary mb-3"></i>
+                    <h5>Submit New Claim</h5>
+                    <p class="text-muted">Create a new monthly claim submission</p>
+                    <a href="/Claim/Submit" class="btn btn-outline-primary">Get Started</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-sync-alt fa-2x text-warning mb-3"></i>
+                    <h5>Auto-Refresh</h5>
+                    <p class="text-muted">Page refreshes every 10 seconds for real-time updates</p>
+                    <small class="text-muted" id="refreshTimer">Next refresh in 10 seconds</small>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Auto-refresh status every 10 seconds
+        let refreshTime = 10;
+
+        function updateTimer() {
+            refreshTime--;
+            document.getElementById('refreshTimer').textContent = `Next refresh in ${refreshTime} seconds`;
+
+            if (refreshTime <= 0) {
+                location.reload();
+                refreshTime = 10;
+            }
+        }
+
+        setInterval(updateTimer, 1000);
+
+        // Real-time status updates for individual claims
+        function updateClaimStatus(claimId) {
+            fetch('/Claim/GetClaimStatus?id=' + claimId)
+                .then(response => response.json())
+                .then(data => {
+                    // Find the row for this claim
+                    const rows = document.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        if (row.querySelector('td:first-child strong').textContent === '#' + claimId) {
+                            // Update status badge
+                            const statusBadge = row.querySelector('.badge');
+                            statusBadge.textContent = data.status;
+                            statusBadge.className = `badge badge-${data.status === 'Approved' ? 'success' : data.status === 'Rejected' ? 'danger' : 'warning'}`;
+
+                            // Update progress bar
+                            const progressBar = row.querySelector('.progress-bar');
+                            if (data.status === 'Pending') {
+                                progressBar.style.width = '33%';
+                                progressBar.className = 'progress-bar bg-warning';
+                                progressBar.title = 'Submitted - Under Review';
+                                row.querySelector('.text-muted').textContent = 'Under Review';
+                            } else if (data.status === 'Approved') {
+                                progressBar.style.width = '100%';
+                                progressBar.className = 'progress-bar bg-success';
+                                progressBar.title = 'Approved - Completed';
+                                row.querySelector('.text-muted').textContent = 'Completed';
+                            } else if (data.status === 'Rejected') {
+                                progressBar.style.width = '100%';
+                                progressBar.className = 'progress-bar bg-danger';
+                                progressBar.title = 'Rejected - Completed';
+                                row.querySelector('.text-muted').textContent = 'Completed';
+                            }
+                        }
+                    });
+                });
+        }
+
+        // Initial call to set up real-time updates
+        @foreach (var claim in Model)
+        {
+            <text>updateClaimStatus(@claim.Id);</text>
+        }
+    </script>
+}

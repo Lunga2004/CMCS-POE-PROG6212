@@ -1,0 +1,109 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|c:\\projects\\cmcs-poe-prog6212\\source\\cmcs\\cmcs\\cmcs\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|solutionrelative:cmcs\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|c:\\projects\\cmcs-poe-prog6212\\source\\cmcs\\cmcs\\cmcs\\views\\claim\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|solutionrelative:cmcs\\views\\claim\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|c:\\projects\\cmcs-poe-prog6212\\source\\cmcs\\cmcs\\cmcs\\views\\claim\\submit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|solutionrelative:cmcs\\views\\claim\\submit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|c:\\projects\\cmcs-poe-prog6212\\source\\cmcs\\cmcs\\cmcs\\controllers\\claimcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|solutionrelative:cmcs\\controllers\\claimcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|c:\\projects\\cmcs-poe-prog6212\\source\\cmcs\\cmcs\\cmcs\\models\\class\\claim.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{45C6BBCC-2A1A-4AE2-9699-FE363BB76560}|CMCS\\CMCS.csproj|solutionrelative:cmcs\\models\\class\\claim.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "CMCS\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "CMCS\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAABIAAAAAAAAAAAAxwCYAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-14T15:22:29.835Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Views\\Claim\\Index.cshtml",
+              "RelativeDocumentMoniker": "CMCS\\Views\\Claim\\Index.cshtml",
+              "ToolTip": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Views\\Claim\\Index.cshtml",
+              "RelativeToolTip": "CMCS\\Views\\Claim\\Index.cshtml",
+              "ViewState": "AgIAABsAAAAAAAAAAAAxwCIAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-14T15:01:00.245Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Submit.cshtml",
+              "DocumentMoniker": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Views\\Claim\\Submit.cshtml",
+              "RelativeDocumentMoniker": "CMCS\\Views\\Claim\\Submit.cshtml",
+              "ToolTip": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Views\\Claim\\Submit.cshtml",
+              "RelativeToolTip": "CMCS\\Views\\Claim\\Submit.cshtml",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAxwCIAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-14T14:59:04.173Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ClaimController.cs",
+              "DocumentMoniker": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Controllers\\ClaimController.cs",
+              "RelativeDocumentMoniker": "CMCS\\Controllers\\ClaimController.cs",
+              "ToolTip": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Controllers\\ClaimController.cs",
+              "RelativeToolTip": "CMCS\\Controllers\\ClaimController.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAABAwDQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T14:54:45.524Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Claim.cs",
+              "DocumentMoniker": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Models\\Class\\Claim.cs",
+              "RelativeDocumentMoniker": "CMCS\\Models\\Class\\Claim.cs",
+              "ToolTip": "C:\\Projects\\CMCS-POE-PROG6212\\Source\\CMCS\\CMCS\\CMCS\\Models\\Class\\Claim.cs",
+              "RelativeToolTip": "CMCS\\Models\\Class\\Claim.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-14T14:52:39.133Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
